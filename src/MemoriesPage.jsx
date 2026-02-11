@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo } from 'react'; // Removed 'useRef' to fix ESLint error
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronLeft, Heart, Binary, Cpu, Terminal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,6 @@ const memories = [
   { id: 8, img: img8, quote: "I promise to stay by your side, through every update.", side: "right" },
 ];
 
-// --- SUB-COMPONENT FOR BACKGROUND DECORATION (Fixes Hook Rule) ---
 const BackgroundDecoration = ({ scrollYProgress, index }) => {
   const randomTop = useMemo(() => Math.random() * 100, []);
   const randomLeft = useMemo(() => Math.random() * 100, []);
@@ -48,7 +47,6 @@ const MemoriesPage = () => {
 
   return (
     <div className="bg-black min-h-screen relative overflow-x-hidden select-none pb-40">
-      {/* --- FIXED NAVIGATION --- */}
       <button 
         onClick={() => navigate('/')} 
         className="fixed top-10 left-10 z-50 bg-white/5 backdrop-blur-xl border border-white/10 p-4 rounded-full text-white hover:bg-red-600/50 transition-all flex items-center gap-2 group"
@@ -57,14 +55,12 @@ const MemoriesPage = () => {
         <span className="text-[10px] font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">Return to Heart</span>
       </button>
 
-      {/* --- PARALLAX BACKGROUND ELEMENTS (FIXED LOGIC) --- */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {[...Array(20)].map((_, i) => (
           <BackgroundDecoration key={i} index={i} scrollYProgress={scrollYProgress} />
         ))}
       </div>
 
-      {/* --- HEADER SECTION --- */}
       <header className="h-screen flex flex-col items-center justify-center text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -91,9 +87,7 @@ const MemoriesPage = () => {
         </motion.div>
       </header>
 
-      {/* --- VERTICAL TIMELINE CONTENT --- */}
       <div className="relative max-w-6xl mx-auto px-6 space-y-40 z-10">
-        {/* Central Circuit Line */}
         <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-red-600/50 via-red-900/20 to-red-600/50 hidden md:block" />
 
         {memories.map((memory, index) => (
@@ -132,12 +126,8 @@ const MemoriesPage = () => {
         ))}
       </div>
 
-      {/* --- FINAL FOOTER --- */}
       <footer className="h-screen flex flex-col items-center justify-center text-center space-y-10 relative z-10">
-        <motion.div 
-            animate={{ scale: [1, 1.2, 1], rotate: [0, 5, -5, 0] }} 
-            transition={{ repeat: Infinity, duration: 3 }}
-        >
+        <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 5, -5, 0] }} transition={{ repeat: Infinity, duration: 3 }}>
           <Heart className="text-red-600" size={120} fill="currentColor" />
         </motion.div>
         <h2 className="text-5xl md:text-7xl font-['Playfair_Display'] font-black text-white italic leading-tight">

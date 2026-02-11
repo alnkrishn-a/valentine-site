@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { Heart, Sparkles, Volume2, VolumeX, HeartPulse, ChevronDown, Fingerprint, Scan, Lock, ArrowRight, Terminal, Binary } from 'lucide-react';
+import { Heart, Sparkles, Volume2, VolumeX, HeartPulse, ChevronDown, Fingerprint, Scan, Lock, ArrowRight, Terminal } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 
@@ -91,7 +91,7 @@ const ValentinePage = () => {
   const [scanProgress, setScanProgress] = useState(0);
   const [isScanning, setIsScanning] = useState(false);
   const [isDoorOpen, setIsDoorOpen] = useState(false);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false); // Music State
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   
   const audioRef = useRef(null);
   const { scrollYProgress } = useScroll();
@@ -177,9 +177,7 @@ const ValentinePage = () => {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-black cursor-none selection:bg-red-800">
-      {/* Background Audio */}
       <audio ref={audioRef} src={loveSong} loop />
-      
       <FallingDecorations />
       {hasAccepted && <motion.div className="fixed top-0 left-0 right-0 h-2 bg-red-600 origin-left z-[10000]" style={{ scaleX }} />}
       <motion.div className="fixed top-0 left-0 w-12 h-12 z-[9999] pointer-events-none" animate={{ x: mousePos.x - 24, y: mousePos.y - 24 }} transition={{ type: 'spring', damping: 35, stiffness: 500 }}>
@@ -269,7 +267,6 @@ const ValentinePage = () => {
               </div>
             </div>
 
-            {/* Functional Music Toggle Button */}
             <button 
               onClick={toggleMusic}
               className="fixed bottom-10 right-10 z-50 bg-red-600/20 backdrop-blur-xl p-4 rounded-full border border-red-600/50 transition-transform hover:scale-110 active:scale-95"
