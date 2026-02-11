@@ -99,17 +99,25 @@ const ValentinePage = () => {
   const startDate = useMemo(() => new Date(2023, 0, 29, 0, 0, 0), []);
   const [timeTogether, setTimeTogether] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
 
-  useEffect(() => {
-    if (hasAccepted) {
-      window.scrollTo(0, 0);
-    }
-  }, [hasAccepted]);
-
   const photoGrid = useMemo(() => [
     img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,
     img11, img12, img13, img14, img15, img16, img17, img18, img19, img20,
     img21, img22, img23, img24, img25, img26, img27, img28, img29, img30
   ], []);
+
+  // --- NEW: PERFORMANCE OPTIMIZATION (PRELOADING) ---
+  useEffect(() => {
+    photoGrid.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [photoGrid]);
+
+  useEffect(() => {
+    if (hasAccepted) {
+      window.scrollTo(0, 0);
+    }
+  }, [hasAccepted]);
 
   const heartPattern = [0,0,1,1,0,1,1,0,0, 0,1,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,1,0, 0,0,1,1,1,1,1,0,0, 0,0,0,1,1,1,0,0,0, 0,0,0,0,1,0,0,0,0];
 
@@ -178,9 +186,18 @@ const ValentinePage = () => {
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-black cursor-none selection:bg-red-800">
       <audio ref={audioRef} src={loveSong} loop />
-      <FallingDecorations />
+      
+      {/* Optimized: Falling items only show on landing to save RAM */}
+      {!hasAccepted && <FallingDecorations />}
+
       {hasAccepted && <motion.div className="fixed top-0 left-0 right-0 h-2 bg-red-600 origin-left z-[10000]" style={{ scaleX }} />}
-      <motion.div className="fixed top-0 left-0 w-12 h-12 z-[9999] pointer-events-none" animate={{ x: mousePos.x - 24, y: mousePos.y - 24 }} transition={{ type: 'spring', damping: 35, stiffness: 500 }}>
+      
+      {/* Optimized: Changed from spring to tween to stop cursor lag */}
+      <motion.div 
+        className="fixed top-0 left-0 w-12 h-12 z-[9999] pointer-events-none" 
+        animate={{ x: mousePos.x - 24, y: mousePos.y - 24 }} 
+        transition={{ type: 'tween', ease: 'backOut', duration: 0.1 }}
+      >
         <Heart fill="#aa0000" className="text-red-500 drop-shadow-[0_0_20px_#ff0000]" size={48} />
       </motion.div>
 
